@@ -1,0 +1,44 @@
+name: buildroot-docker-images
+
+on:
+  push:
+    branches:
+      - '*'
+    paths-ignore:
+      - '**/README.md'
+  pull_request:
+    branches:
+      - '*'
+  schedule:
+    - cron: '30 22 * * *'
+  workflow_dispatch:
+
+jobs:
+  buildroot-docker-images:
+    name: buildroot:${{ matrix.image }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image: ["archlinux"]
+    steps:
+      - name: "Checkout Code"
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+          fetch-depth: 5
+      - name: "Build the image"
+        run: CPUS=4.0 MEMORY=8GB make ${{ matrix.image }}
+      - name: "Pull the latest image"
+        run: CPUS=4.0 MEMORY=8GB make ${{ matrix.image }}.update
+      - name: "Test the image"
+        run: CPUS=4.0 MEMORY=8GB make ${{ matrix.image }}.test
+#      - name: "clean the image"
+#        run: CPUS=4.0 MEMORY=8GB make ${{ matrix.image }}.clean
+#      - name: purge the image
+#        run: CPUS=4.0 MEMORY=8GB make ${{ matrix.image }}.purge
+      - name: "Push to hub.docker.com registry"
+        if: github.ref == 'refs/heads/main'
+        run: |
+            echo ${{ secrets.DOCKER_PASS }} | docker login --username ${{ secrets.DOCKER_USER }} --password-stdin
+            CPUS=4.0 MEMORY=8GB make ${{ matrix.image }}.push

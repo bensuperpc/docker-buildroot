@@ -1,0 +1,25 @@
+ARG BASE_IMAGE=ubuntu:24.04
+FROM ${BASE_IMAGE} AS base
+
+#include "common.debian"
+
+#include "common.gosu"
+
+FROM base AS final
+
+#include "common.label-and-env"
+
+VOLUME [ "/work" ]
+WORKDIR /work
+
+ARG BUILDROOT_VERSION=2025.05
+ENV BUILDROOT_VERSION=${BUILDROOT_VERSION}
+
+#include "common.buildroot"
+
+ARG USER_PRE_CMD_EXEC="/buildroot.sh"
+ENV USER_PRE_CMD_EXEC=${USER_PRE_CMD_EXEC}
+
+#include "common.entrypoint"
+
+CMD ["/bin/bash", "-l"]

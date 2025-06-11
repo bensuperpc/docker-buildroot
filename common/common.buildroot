@@ -1,0 +1,2 @@
+COPY common/buildroot.sh /buildroot.sh
+RUN chmod 755 /buildroot.sh && chown root:root /buildroot.sh
