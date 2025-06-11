@@ -1,0 +1,67 @@
+ENV DEBIAN_FRONTEND=noninteractive
+# --no-install-recommends
+
+RUN apt-get update && apt-get -y install \
+    build-essential \
+    ninja-build \
+    flex \
+    ccache \
+    binutils \
+    autoconf \
+    automake \
+    texinfo \
+    unzip \
+    libtool-bin \
+    libtool-doc \
+    libncurses5-dev \
+    bison \
+    byacc \
+    autogen \
+    bash \
+    bc \
+    bzip2 \
+    ca-certificates \
+    curl \
+    findutils \
+    dirmngr \
+    file \
+    gettext \
+    gzip \
+    gnupg \
+    initramfs-tools \
+    make \
+    ncurses-dev \
+    pkg-config \
+    pax \
+    python3-distutils \
+    python3-dev \
+    libdevmapper-dev \
+    libsystemd-dev \
+    sed \
+    meson \
+    gawk \
+    rsync \
+    lzip \
+    ssh \
+    tar \
+    wget \
+    gperf \
+    mercurial \
+    xz-utils \
+    zip \
+    zlib1g-dev \
+    help2man \
+    git \
+    locales \
+    asciidoc \
+    w3m \
+    graphviz \
+    libssl-dev \
+    libfdt-dev \
+    libelf-dev \
+    libgmp-dev \
+    libisl-dev \
+    libmpc-dev \
+    && apt-get clean autoclean --yes \
+    && apt-get autoremove --purge --yes \
+    && rm -rf /var/lib/{apt,dpkg,cache,log}/
